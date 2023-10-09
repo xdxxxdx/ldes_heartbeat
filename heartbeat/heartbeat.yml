@@ -1,0 +1,24 @@
+heartbeat.monitors:
+  - type: http
+    id: gipod
+    name: gipod
+    service.name: gipod
+    hosts: [ "https://private-api.gipod.vlaanderen.be/api/v1/ldes/mobility-hindrances?generatedAtTime=2021-01-06T18:04:12.173Z" ]
+    check.response.status: [ 200 ]
+    schedule: '@every 5s'
+
+  - type: http
+    id: water-quality-observations
+    name: water-quality-observations
+    service.name: water-quality-observations
+    hosts: [ "https://apim-iow-apimanagement.azure-api.net/ldes/water-quality-observations-by-time" ]
+    check.response.status: [ 200 ]
+    schedule: '@every 5s'
+
+processors:
+  - add_cloud_metadata: ~
+
+output.elasticsearch:
+  hosts: '${ELASTICSEARCH_HOSTS:elasticsearch:9200}'
+  username: '${ELASTICSEARCH_USERNAME:}'
+  password: '${ELASTICSEARCH_PASSWORD:}'
